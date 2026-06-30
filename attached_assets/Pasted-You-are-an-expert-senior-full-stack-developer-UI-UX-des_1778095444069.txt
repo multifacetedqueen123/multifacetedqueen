@@ -1,0 +1,256 @@
+You are an expert senior full-stack developer, UI/UX designer, and modern website architect.
+
+Create a modern luxury responsive business website for a beauty and creative services business.
+
+The client wants ONE clean website with top navigation tabs that allow users to quickly switch between:
+1. Hair
+2. Crafting Projects
+3. Alterations
+
+IMPORTANT:
+Do not create too many separate pages. Keep it as one clean website with top tabs and smooth scrolling between sections.
+
+The design should feel:
+- Premium
+- Feminine
+- Elegant
+- Modern
+- High-end
+- Easy to navigate
+
+==================================================
+CLIENT REQUIREMENTS
+==================================================
+
+The client specifically requested:
+- Pink
+- Black
+- Gold
+- Hot pink accents
+
+The website should function mainly as:
+- A professional online presence
+- A booking/scheduling platform
+- A gallery showcase
+- A lead generation website
+
+Customer flow:
+1. User visits website
+2. User selects Hair, Crafting Projects, or Alterations
+3. User books an appointment or consultation
+4. Business owner manually handles the rest afterward
+
+The client wants:
+- Everything organized at the top
+- Smooth tab navigation
+- Easy switching between sections
+- Scheduler inside every section
+- Pricing guide inside every section
+- Images/gallery inside every section
+
+==================================================
+TECH STACK
+==================================================
+
+Use:
+- React
+- Next.js
+- Tailwind CSS
+- Framer Motion
+
+Create:
+- Clean reusable component structure
+- Responsive mobile-first layout
+- Professional code organization
+
+==================================================
+DESIGN STYLE
+==================================================
+
+Use inspiration from:
+- Luxury salon websites
+- Modern boutique businesses
+- Fashion and beauty brands
+
+Design style:
+- Elegant typography
+- Soft shadows
+- Rounded premium cards
+- Smooth animations
+- Luxury spacing
+- Sticky transparent navbar
+- Smooth scrolling
+- Hover animations
+- Modern section transitions
+
+Color palette:
+- Black
+- Gold
+- Hot pink
+- Soft pink
+- White accents
+
+The website should feel visually impressive and client-ready.
+
+==================================================
+SECTION 1 — HERO SECTION
+==================================================
+
+Create a premium full-screen hero section with:
+- Elegant background image
+- Luxury overlay
+- Business name placeholder:
+  “Creative Beauty & Alterations Studio”
+- Subtitle:
+  “Beauty, Creativity, and Perfect Fit — All in One Place”
+- CTA buttons:
+  - Book Appointment
+  - Explore Services
+
+Add smooth entrance animations.
+
+==================================================
+SECTION 2 — TOP TAB NAVIGATION
+==================================================
+
+Create a sticky top navigation with tabs:
+- Hair
+- Crafting Projects
+- Alterations
+- Contact
+
+Tabs should:
+- Smooth scroll to sections
+- Highlight active section
+- Work perfectly on mobile and desktop
+
+==================================================
+SECTION 3 — HAIR SECTION
+==================================================
+
+Include:
+- Elegant section header
+- Hair service cards
+- Pricing guide cards
+- Scheduler/booking button
+- Deposit payment button
+- Hair styles gallery
+- Modern layout cards
+- CTA area
+
+Hair services:
+- Haircuts
+- Coloring
+- Styling
+- Treatments
+- Bridal/Special Events
+
+==================================================
+SECTION 4 — CRAFTING PROJECTS SECTION
+==================================================
+
+Include:
+- Custom projects showcase
+- Consultation scheduler
+- Inquiry form
+- Pricing explanation
+- Image gallery
+- Project process section
+
+Explain:
+“Pricing depends on customization, materials, and project complexity.”
+
+Create process cards:
+1. Consultation
+2. Design
+3. Creation
+4. Delivery
+
+==================================================
+SECTION 5 — ALTERATIONS SECTION
+==================================================
+
+Include:
+- Alteration service cards
+- Pricing guide
+- Scheduler button
+- Before/after image gallery
+- Service explanation cards
+- CTA section
+
+Services include:
+- Hemming
+- Resizing
+- Dress alterations
+- Zipper repair
+- Sleeve adjustments
+- Custom fitting
+
+==================================================
+SECTION 6 — GALLERY SECTION
+==================================================
+
+Create a premium image gallery area with:
+- Masonry/grid layout
+- Placeholder images
+- Hover zoom effects
+- Category filtering
+
+==================================================
+SECTION 7 — TESTIMONIALS
+==================================================
+
+Create elegant testimonial cards with:
+- Client reviews
+- Star ratings
+- Smooth animations
+
+==================================================
+SECTION 8 — CONTACT SECTION
+==================================================
+
+Include:
+- Modern contact form
+- Phone placeholder
+- Email placeholder
+- Business hours
+- Social media icons
+- Embedded map placeholder
+
+==================================================
+ANIMATIONS & UX
+==================================================
+
+Use Framer Motion for:
+- Fade-ins
+- Scroll reveals
+- Card hover effects
+- Smooth transitions
+- Button animations
+- Section animations
+
+==================================================
+IMPORTANT REQUIREMENTS
+==================================================
+
+- Make the website visually stunning
+- Make it realistic and client-presentable
+- Use premium modern UI
+- Avoid generic/basic template appearance
+- Use responsive mobile-first design
+- Keep navigation simple and elegant
+- Focus heavily on user experience
+- Use reusable React components
+- Include placeholder images from Unsplash
+- Make homepage especially impressive
+- Keep layout spacious and luxurious
+
+Start by building:
+1. Layout structure
+2. Navbar
+3. Hero section
+4. Main sections
+5. Responsive design
+6. Animations
+7. Galleries
+8. Contact section

@@ -1,0 +1,62 @@
+uploads = []
+outputs = []
+
+[[generated]]
+id = "yoHDp7V2T3gX2LovZiKLA"
+uri = "file://artifacts/beauty-studio/public/images/hero.png"
+type = "image"
+title = "Hero luxury studio"
+
+[[generated]]
+id = "z44xkCd_xoDJuPuA8XM8m"
+uri = "file://artifacts/beauty-studio/public/images/hair-1.png"
+type = "image"
+title = "Balayage hair style"
+
+[[generated]]
+id = "ROY9km_-7kX-tX1HNpMa0"
+uri = "file://artifacts/beauty-studio/public/images/hair-2.png"
+type = "image"
+title = "Bridal updo hair"
+
+[[generated]]
+id = "xxckAbeEPi50d3dNnuPf9"
+uri = "file://artifacts/beauty-studio/public/images/hair-3.png"
+type = "image"
+title = "Sleek blowout hair"
+
+[[generated]]
+id = "E_Eug2YbfwXQYzczQ_Hyi"
+uri = "file://artifacts/beauty-studio/public/images/hair-4.png"
+type = "image"
+title = "Color melt hair"
+
+[[generated]]
+id = "Iq1wELuMUGMdhmkpOcPYN"
+uri = "file://artifacts/beauty-studio/public/images/craft-1.png"
+type = "image"
+title = "Custom glitter tumbler"
+
+[[generated]]
+id = "NS7EMdIYKv6l0rvGUtf7h"
+uri = "file://artifacts/beauty-studio/public/images/craft-2.png"
+type = "image"
+title = "Personalized gift box"
+
+[[generated]]
+id = "Sjxu0bJQkhned_bfpKScj"
+uri = "file://artifacts/beauty-studio/public/images/craft-3.png"
+type = "image"
+title = "Custom apparel"
+
+[[generated]]
+id = "BsagaX5bFBKpFEAcaB1SL"
+uri = "file://artifacts/beauty-studio/public/images/alt-1.png"
+type = "image"
+title = "Dress fitting"
+
+[[generated]]
+id = "oDeHveGDzHZjnUZLFcXHQ"
+uri = "file://artifacts/beauty-studio/public/images/alt-2.png"
+type = "image"
+title = "Bridal gown alterations"
