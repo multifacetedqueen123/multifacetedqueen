@@ -9,11 +9,13 @@ export default function Footer() {
         <div className="flex flex-col md:flex-row justify-between items-center gap-8 mb-10">
           <div className="text-center md:text-left">
             <div className="font-serif text-2xl font-bold tracking-wider text-white mb-2">
-              <span className="text-primary">C</span>reative{" "}
-              <span className="text-secondary">&amp;</span> Studio
+              Multifaceted <span className="text-secondary">Queen</span>
             </div>
-            <p className="text-sm text-white/40 tracking-wide">
+            <p className="text-sm text-white/40 tracking-wide mb-1">
               Beauty, Creativity, and Perfect Fit — All in One Place
+            </p>
+            <p className="text-xs text-white/60">
+              Call / Text: <a href="tel:7063478273" className="text-secondary font-medium hover:underline">706-347-8273</a>
             </p>
           </div>
 

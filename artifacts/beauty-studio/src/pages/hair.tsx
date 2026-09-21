@@ -2,7 +2,7 @@ import { motion } from "framer-motion";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
-import { Scissors, Star } from "lucide-react";
+import { Scissors, Star, CheckCircle2, AlertCircle, Phone, DollarSign } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -21,26 +21,78 @@ const schema = z.object({
   message: z.string().optional(),
 });
 
-const services = [
-  { title: "Precision Haircuts", desc: "Tailored to your face shape and lifestyle.", price: "From $85" },
-  { title: "Custom Coloring", desc: "Balayage, highlights, and all-over color.", price: "From $150" },
-  { title: "Luxury Styling", desc: "Blowouts, silk presses, and elegant waves.", price: "From $65" },
-  { title: "Nourishing Treatments", desc: "Deep conditioning and restorative care.", price: "From $45" },
-  { title: "Bridal & Events", desc: "Flawless updos and styling for special days.", price: "From $120" },
-  { title: "Extensions", desc: "Premium volume and length additions.", price: "Consultation" },
-];
+interface HairSubService {
+  name: string;
+  price: string;
+  note?: string;
+}
 
-const pricing = [
-  { service: "Shampoo & Blowout", price: "$55–$85" },
-  { service: "Women's Haircut", price: "$85–$120" },
-  { service: "Men's Haircut", price: "$45–$65" },
-  { service: "Single Process Color", price: "$100–$145" },
-  { service: "Balayage / Highlights", price: "$150–$250+" },
-  { service: "Silk Press", price: "$75–$110" },
-  { service: "Keratin Treatment", price: "$200–$350" },
-  { service: "Deep Conditioning", price: "$45–$65" },
-  { service: "Bridal Hair", price: "From $120" },
-  { service: "Extensions (install)", price: "Consultation" },
+interface HairCategory {
+  title: string;
+  price?: string;
+  note?: string;
+  includes?: string[];
+  requirements?: string[];
+  addons?: { name: string; price: string }[];
+  styles?: string[];
+  services?: HairSubService[];
+}
+
+// Official Hair Services Categories
+const hairCategories: HairCategory[] = [
+  {
+    title: "Natural Hairstyles",
+    price: "$85",
+    includes: ["Hair trim", "Hair growth treatment"],
+    styles: ["Bantu Knots", "Twist Outs", "Two Strand Twists"],
+  },
+  {
+    title: "Braids & Twists",
+    price: "$150",
+    includes: ["Hair trim", "Hair growth treatment"],
+    addons: [
+      { name: "Hair Included", price: "$25" },
+      { name: "Boho Style Hair", price: "$30" },
+    ],
+    styles: [
+      "Passion Twists",
+      "Senegalese Twists",
+      "Marley Twists",
+      "Two Strand Kinky Twists",
+      "Box Braids",
+      "Knotless Box Braids",
+    ],
+  },
+  {
+    title: "Protective Hairstyles",
+    includes: ["Hair trim", "Hair growth treatment"],
+    services: [
+      { name: "Faux Locs", price: "$200" },
+      { name: "Crochet Styles", price: "$100" },
+      { name: "Quick Weaves", price: "$80" },
+      { name: "Ponytails", price: "$60–$90", note: "depending on style" },
+    ],
+  },
+  {
+    title: "Wig Installs",
+    price: "$100",
+    requirements: [
+      "Natural hair must be washed prior to appointment",
+      "Wigs are not provided",
+    ],
+    includes: ["Hair oil treatment", "Braid down"],
+  },
+  {
+    title: "Traditional Locs",
+    note: "All retwists include Loc maintenance & Hair growth treatment",
+    services: [
+      { name: "Retwist (Kids)", price: "$45" },
+      { name: "Retwist (Adults)", price: "$75" },
+      { name: "Retwist & Style (Kids)", price: "$60" },
+      { name: "Retwist & Style (Adults)", price: "$90" },
+      { name: "ACV Detox", price: "$60" },
+    ],
+  },
 ];
 
 const gallery = [
@@ -53,9 +105,9 @@ const gallery = [
 ];
 
 const testimonials = [
-  { name: "Sarah M.", text: "The balayage completely transformed my look. I've never felt more confident walking out of a salon.", stars: 5 },
-  { name: "Priya K.", text: "My bridal hair was absolutely perfect. Every curl stayed in place all night long.", stars: 5 },
-  { name: "Danielle R.", text: "The silk press was flawless. She really understood my hair texture and what it needed.", stars: 5 },
+  { name: "Sarah M.", text: "Styled by B is incredible! My knotless box braids were neat, lightweight, and lasted so long.", stars: 5 },
+  { name: "Priya K.", text: "The hair growth treatment and loc maintenance left my locs feeling healthy, refreshed, and perfectly styled.", stars: 5 },
+  { name: "Danielle R.", text: "Best wig install experience ever! The braid down was firm yet comfortable and the oil treatment was amazing.", stars: 5 },
 ];
 
 const fadeUp = {
@@ -73,7 +125,7 @@ export default function HairPage() {
   const onSubmit = () => {
     toast({
       title: "Appointment Requested",
-      description: "Thank you! We'll be in touch shortly to confirm your hair appointment.",
+      description: "Thank you! We'll be in touch shortly to confirm your hair appointment with Styled by B.",
     });
     form.reset();
   };
@@ -84,7 +136,7 @@ export default function HairPage() {
       <div className="pt-36 pb-16 text-center relative overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-b from-primary/5 to-transparent pointer-events-none" />
         <motion.div initial="hidden" animate="visible" variants={fadeUp}>
-          <p className="text-primary text-xs tracking-[0.3em] uppercase mb-4">The Studio</p>
+          <p className="text-primary text-xs tracking-[0.3em] uppercase mb-4">Styled by B</p>
           <h1 className="font-serif text-5xl md:text-6xl font-bold text-white mb-5">Hair Studio</h1>
           <div className="flex items-center justify-center gap-4 mb-5">
             <div className="h-px w-16 bg-secondary/60" />
@@ -92,23 +144,97 @@ export default function HairPage() {
             <div className="h-px w-16 bg-secondary/60" />
           </div>
           <p className="text-white/60 max-w-xl mx-auto text-lg leading-relaxed">
-            Luxury hair care tailored to your unique style — from precision cuts to transformative color.
+            Luxury natural hair styling, custom braids, protective styles, wig installs, and loc maintenance.
           </p>
         </motion.div>
       </div>
 
       <div className="container mx-auto px-4 md:px-8 pb-24 space-y-24">
 
-        {/* Services Grid */}
+        {/* BOOKING POLICY HIGHLIGHTS BANNER */}
         <section>
-          <motion.h2
-            initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeUp}
-            className="font-serif text-3xl text-white mb-10 text-center"
-          >
-            Our Services
-          </motion.h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {services.map((s, i) => (
+          <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeUp}>
+            <div className="bg-card border border-secondary/40 p-6 md:p-8 relative overflow-hidden">
+              <div className="absolute top-0 right-0 w-32 h-32 bg-secondary/5 rounded-full blur-2xl pointer-events-none" />
+              <div className="mb-6 border-b border-border/40 pb-4">
+                <span className="text-secondary text-xs tracking-[0.3em] uppercase block mb-1">Styled by B Policy</span>
+                <h2 className="font-serif text-2xl md:text-3xl text-white">Booking Policy & Preparation</h2>
+              </div>
+              
+              {/* Highlighted Policy Badges */}
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+                <div className="bg-primary/10 border-l-4 border-primary p-4">
+                  <div className="flex items-center gap-2 text-primary font-semibold mb-1">
+                    <AlertCircle className="w-4 h-4 shrink-0" />
+                    <span>$25 Non-Refundable Deposit</span>
+                  </div>
+                  <p className="text-white/60 text-xs leading-relaxed">
+                    A $25 non-refundable deposit is required to secure your appointment spot.
+                  </p>
+                </div>
+                <div className="bg-secondary/10 border-l-4 border-secondary p-4">
+                  <div className="flex items-center gap-2 text-secondary font-semibold mb-1">
+                    <CheckCircle2 className="w-4 h-4 shrink-0" />
+                    <span>4 Inches Minimum Length</span>
+                  </div>
+                  <p className="text-white/60 text-xs leading-relaxed">
+                    Hair must be at least 4 inches in length for all braiding and styling services.
+                  </p>
+                </div>
+                <div className="bg-white/5 border-l-4 border-white/40 p-4">
+                  <div className="flex items-center gap-2 text-white font-semibold mb-1">
+                    <Scissors className="w-4 h-4 shrink-0" />
+                    <span>Hairstyle Locked Upon Booking</span>
+                  </div>
+                  <p className="text-white/60 text-xs leading-relaxed">
+                    Once an appointment is booked, the requested hairstyle cannot be changed.
+                  </p>
+                </div>
+              </div>
+
+              {/* Deposit Accepted Through & Instructions */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 bg-background/60 p-6 border border-border/50">
+                <div>
+                  <h4 className="font-serif text-lg text-white mb-3 flex items-center gap-2">
+                    <DollarSign className="w-5 h-5 text-secondary" />
+                    Deposit Accepted Through:
+                  </h4>
+                  <div className="space-y-2 text-sm">
+                    <div className="flex items-center justify-between border-b border-border/30 pb-2">
+                      <span className="text-white/70 font-medium">Cash App:</span>
+                      <span className="text-secondary font-mono font-bold">$brandydd314</span>
+                    </div>
+                    <div className="flex items-center justify-between border-b border-border/30 pb-2">
+                      <span className="text-white/70 font-medium">Zelle:</span>
+                      <a href="tel:7063478273" className="text-secondary font-mono font-bold hover:underline">
+                        706-347-8273
+                      </a>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="flex flex-col justify-center space-y-3">
+                  <div className="bg-secondary/10 p-3 text-secondary text-xs font-medium border border-secondary/20">
+                    💡 <span className="font-semibold">Instruction:</span> "Please include your hairstyle and any add-ons in the payment note."
+                  </div>
+                  <p className="text-white/60 text-xs italic leading-relaxed">
+                    "If you have any questions about services, pricing, or preparation, please reach out and ask before booking."
+                  </p>
+                </div>
+              </div>
+            </div>
+          </motion.div>
+        </section>
+
+        {/* Services & Pricing Cards */}
+        <section>
+          <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeUp} className="text-center mb-12">
+            <p className="text-primary text-xs tracking-[0.3em] uppercase mb-3">Styled by B Services</p>
+            <h2 className="font-serif text-3xl md:text-4xl text-white">Services & Pricing Guide</h2>
+          </motion.div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {hairCategories.map((cat, i) => (
               <motion.div
                 key={i}
                 custom={i}
@@ -117,18 +243,91 @@ export default function HairPage() {
                 viewport={{ once: true }}
                 variants={fadeUp}
               >
-                <Card
-                  data-testid={`card-service-${i}`}
-                  className="bg-card border-border/60 hover:border-secondary/70 transition-all duration-300 h-full rounded-none group"
-                >
-                  <CardHeader className="pb-2">
-                    <CardTitle className="font-serif text-xl text-white group-hover:text-secondary transition-colors">
-                      {s.title}
-                    </CardTitle>
+                <Card data-testid={`card-hair-category-${i}`} className="bg-card border-border/60 hover:border-secondary/60 transition-all duration-300 h-full rounded-none flex flex-col justify-between">
+                  <CardHeader className="border-b border-border/40 pb-4">
+                    <div className="flex justify-between items-start gap-2">
+                      <CardTitle className="font-serif text-xl text-white">{cat.title}</CardTitle>
+                      {cat.price && <span className="text-secondary font-bold text-lg">{cat.price}</span>}
+                    </div>
+                    {cat.note && <p className="text-secondary/80 text-xs italic mt-1">{cat.note}</p>}
                   </CardHeader>
-                  <CardContent>
-                    <p className="text-white/50 text-sm mb-4 leading-relaxed">{s.desc}</p>
-                    <span className="text-secondary font-semibold text-sm tracking-wide">{s.price}</span>
+                  <CardContent className="pt-4 flex-grow space-y-4">
+                    
+                    {/* Includes */}
+                    {cat.includes && cat.includes.length > 0 && (
+                      <div>
+                        <span className="text-xs uppercase tracking-widest text-primary font-semibold block mb-2">Includes:</span>
+                        <ul className="space-y-1">
+                          {cat.includes.map((inc, idx) => (
+                            <li key={idx} className="text-white/70 text-xs flex items-center gap-2">
+                              <span className="w-1.5 h-1.5 rounded-full bg-primary shrink-0" />
+                              {inc}
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    )}
+
+                    {/* Requirements */}
+                    {cat.requirements && cat.requirements.length > 0 && (
+                      <div className="bg-primary/10 p-3 border-l-2 border-primary">
+                        <span className="text-xs uppercase tracking-widest text-primary font-semibold block mb-1">Requirements:</span>
+                        <ul className="space-y-1">
+                          {cat.requirements.map((req, idx) => (
+                            <li key={idx} className="text-white/80 text-xs italic">
+                              • {req}
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    )}
+
+                    {/* Add-ons */}
+                    {cat.addons && cat.addons.length > 0 && (
+                      <div>
+                        <span className="text-xs uppercase tracking-widest text-secondary font-semibold block mb-2">Add-ons:</span>
+                        <div className="space-y-1">
+                          {cat.addons.map((addon, idx) => (
+                            <div key={idx} className="flex justify-between text-xs bg-white/5 px-2.5 py-1.5 border border-border/30">
+                              <span className="text-white/80">{addon.name}</span>
+                              <span className="text-secondary font-semibold">{addon.price}</span>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Services list (for protective hairstyles & locs) */}
+                    {cat.services && cat.services.length > 0 && (
+                      <div>
+                        <span className="text-xs uppercase tracking-widest text-white/50 font-semibold block mb-2">Options & Rates:</span>
+                        <div className="space-y-1.5">
+                          {cat.services.map((srv, idx) => (
+                            <div key={idx} className="flex justify-between items-center text-xs py-1.5 border-b border-border/30">
+                              <div>
+                                <span className="text-white/90 font-medium">{srv.name}</span>
+                                {srv.note && <span className="text-white/40 text-[10px] block">{srv.note}</span>}
+                              </div>
+                              <span className="text-secondary font-bold">{srv.price}</span>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Available Styles */}
+                    {cat.styles && cat.styles.length > 0 && (
+                      <div>
+                        <span className="text-xs uppercase tracking-widest text-white/50 font-semibold block mb-2">Available Styles:</span>
+                        <div className="flex flex-wrap gap-1.5">
+                          {cat.styles.map((st, idx) => (
+                            <span key={idx} className="text-[11px] bg-white/5 text-white/80 px-2.5 py-1 border border-border/40">
+                              {st}
+                            </span>
+                          ))}
+                        </div>
+                      </div>
+                    )}
                   </CardContent>
                 </Card>
               </motion.div>
@@ -136,58 +335,36 @@ export default function HairPage() {
           </div>
         </section>
 
-        {/* Pricing Guide */}
-        <section>
-          <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeUp} className="text-center mb-10">
-            <p className="text-primary text-xs tracking-[0.3em] uppercase mb-3">Transparent Pricing</p>
-            <h2 className="font-serif text-3xl md:text-4xl text-white">Pricing Guide</h2>
-          </motion.div>
-          <motion.div
-            initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeUp}
-            className="max-w-2xl mx-auto bg-card border border-border/60 rounded-none"
-          >
-            {pricing.map((item, i) => (
-              <div
-                key={i}
-                className={`flex justify-between items-center px-8 py-4 ${
-                  i < pricing.length - 1 ? "border-b border-border/30" : ""
-                } hover:bg-white/5 transition-colors`}
-              >
-                <span className="text-white/80 font-medium">{item.service}</span>
-                <span className="text-secondary font-semibold text-sm">{item.price}</span>
-              </div>
-            ))}
-            <div className="px-8 py-5 bg-primary/10 border-t border-primary/30">
-              <p className="text-white/50 text-xs leading-relaxed">
-                Prices are estimates and may vary based on hair length, density, and condition. Consultation required for extensions and color corrections.
-              </p>
-            </div>
-          </motion.div>
-        </section>
-
-        {/* Booking / Scheduler */}
+        {/* Booking / Scheduler Form */}
         <section>
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
             <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeUp}>
-              <p className="text-primary text-xs tracking-[0.3em] uppercase mb-3">Schedule Your Visit</p>
-              <h2 className="font-serif text-4xl text-white mb-6">Book an Appointment</h2>
+              <p className="text-primary text-xs tracking-[0.3em] uppercase mb-3">Appointments by Appointment Only</p>
+              <h2 className="font-serif text-4xl text-white mb-6">Book with Styled by B</h2>
               <p className="text-white/50 leading-relaxed mb-8">
-                Reserve your spot today. A security deposit secures your booking. We'll confirm your appointment within 24 hours.
+                Ready for your hair transformation? Submit your appointment request below. Remember that a $25 non-refundable deposit is required to lock in your appointment time.
               </p>
-              <div className="bg-secondary/10 border-l-4 border-secondary p-6 mb-8">
-                <h4 className="font-serif text-secondary mb-2">Security Deposit</h4>
-                <p className="text-white/50 text-sm leading-relaxed">
-                  All hair appointments require a deposit to confirm your booking. Deposits are applied to your service total.
+              
+              <div className="space-y-4 mb-8">
+                <div className="flex items-center gap-3 text-white/70 text-sm">
+                  <CheckCircle2 className="w-5 h-5 text-secondary shrink-0" />
+                  <span>By Appointment Only</span>
+                </div>
+                <div className="flex items-center gap-3 text-white/70 text-sm">
+                  <Phone className="w-5 h-5 text-secondary shrink-0" />
+                  <span>Call / Text: <a href="tel:7063478273" className="text-secondary font-semibold hover:underline">706-347-8273</a></span>
+                </div>
+              </div>
+
+              <div className="bg-secondary/10 border-l-4 border-secondary p-6">
+                <h4 className="font-serif text-secondary mb-2 font-bold">Deposit Payment Quick Reference</h4>
+                <p className="text-white/70 text-sm mb-3">
+                  Cash App: <span className="text-secondary font-mono font-bold">$brandydd314</span> | Zelle: <a href="tel:7063478273" className="text-secondary font-mono font-bold hover:underline">706-347-8273</a>
+                </p>
+                <p className="text-white/50 text-xs italic">
+                  Note: Please state your hairstyle and add-ons in the payment memo.
                 </p>
               </div>
-              <Button
-                data-testid="button-deposit"
-                variant="outline"
-                size="lg"
-                className="border-secondary text-secondary hover:bg-secondary hover:text-black rounded-none px-10 py-6 text-base tracking-widest uppercase w-full sm:w-auto"
-              >
-                Pay Security Deposit
-              </Button>
             </motion.div>
 
             <motion.div
@@ -244,16 +421,16 @@ export default function HairPage() {
                       <Select onValueChange={field.onChange} defaultValue={field.value}>
                         <FormControl>
                           <SelectTrigger data-testid="select-service" className="bg-background rounded-none border-border/60 focus:ring-primary text-white/60 py-5">
-                            <SelectValue placeholder="Select Service" />
+                            <SelectValue placeholder="Select Desired Service" />
                           </SelectTrigger>
                         </FormControl>
                         <SelectContent className="bg-card border-border rounded-none">
-                          <SelectItem value="haircut">Precision Haircut</SelectItem>
-                          <SelectItem value="color">Custom Coloring</SelectItem>
-                          <SelectItem value="styling">Luxury Styling</SelectItem>
-                          <SelectItem value="bridal">Bridal & Events</SelectItem>
-                          <SelectItem value="treatment">Treatment</SelectItem>
-                          <SelectItem value="extensions">Extensions</SelectItem>
+                          <SelectItem value="natural">Natural Hairstyles ($85)</SelectItem>
+                          <SelectItem value="braids">Braids & Twists ($150)</SelectItem>
+                          <SelectItem value="protective">Protective Hairstyles ($60–$200)</SelectItem>
+                          <SelectItem value="wig">Wig Installs ($100)</SelectItem>
+                          <SelectItem value="locs">Traditional Locs ($45–$90)</SelectItem>
+                          <SelectItem value="detox">ACV Detox ($60)</SelectItem>
                         </SelectContent>
                       </Select>
                       <FormMessage />
@@ -277,7 +454,7 @@ export default function HairPage() {
                       <FormControl>
                         <Textarea
                           data-testid="textarea-message"
-                          placeholder="Any specific requests or notes?"
+                          placeholder="Specify hairstyle, add-ons, hair length, or questions..."
                           className="bg-background rounded-none border-border/60 focus-visible:ring-primary resize-none"
                           rows={3}
                           {...field}
@@ -303,7 +480,7 @@ export default function HairPage() {
         {/* Gallery */}
         <section>
           <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeUp} className="text-center mb-10">
-            <p className="text-primary text-xs tracking-[0.3em] uppercase mb-3">Our Work</p>
+            <p className="text-primary text-xs tracking-[0.3em] uppercase mb-3">Styled by B Portfolio</p>
             <h2 className="font-serif text-3xl md:text-4xl text-white">Hair Gallery</h2>
           </motion.div>
           <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 md:gap-4">
@@ -321,7 +498,7 @@ export default function HairPage() {
                   <img
                     data-testid={`img-hair-gallery-${i}`}
                     src={src}
-                    alt={`Hair style ${i + 1}`}
+                    alt={`Styled by B Hair style ${i + 1}`}
                     className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                   />
                   <div className="absolute inset-0 bg-primary/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
@@ -365,3 +542,4 @@ export default function HairPage() {
     </div>
   );
 }
+

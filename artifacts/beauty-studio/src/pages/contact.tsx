@@ -81,7 +81,9 @@ export default function ContactPage() {
                 </div>
                 <div>
                   <h4 className="font-serif text-xl text-white mb-2">Phone</h4>
-                  <p className="text-white/55">(555) 000-0000</p>
+                  <a href="tel:7063478273" className="text-white/80 hover:text-secondary transition-colors font-medium">
+                    706-347-8273
+                  </a>
                 </div>
               </div>
 
@@ -101,19 +103,15 @@ export default function ContactPage() {
                 </div>
                 <div>
                   <h4 className="font-serif text-xl text-white mb-3">Business Hours</h4>
-                  <table className="text-white/55 text-sm w-full max-w-[220px]">
+                  <table className="text-white/55 text-sm w-full max-w-[260px]">
                     <tbody>
                       <tr>
-                        <td className="py-1.5 pr-8">Monday – Friday</td>
-                        <td className="text-right text-secondary">9:00 AM – 7:00 PM</td>
+                        <td className="py-1.5 pr-4">Monday – Friday</td>
+                        <td className="text-right text-secondary font-medium">12:00 PM – 7:00 PM</td>
                       </tr>
                       <tr>
-                        <td className="py-1.5 pr-8">Saturday</td>
-                        <td className="text-right text-secondary">9:00 AM – 5:00 PM</td>
-                      </tr>
-                      <tr>
-                        <td className="py-1.5 pr-8">Sunday</td>
-                        <td className="text-right text-white/35">By Appointment</td>
+                        <td className="py-1.5 pr-4">Saturday – Sunday</td>
+                        <td className="text-right text-white/50 italic">Appointment Only</td>
                       </tr>
                     </tbody>
                   </table>

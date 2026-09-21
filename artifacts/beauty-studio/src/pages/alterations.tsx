@@ -2,12 +2,13 @@ import { motion } from "framer-motion";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
-import { ScissorsLineDashed, Star } from "lucide-react";
+import { ScissorsLineDashed, Star, Phone, Clock, AlertCircle, FileText } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Form, FormControl, FormField, FormItem, FormMessage } from "@/components/ui/form";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
 import Footer from "@/components/Footer";
 
@@ -21,25 +22,65 @@ const schema = z.object({
   notes: z.string().optional(),
 });
 
-const services = [
-  { title: "Hemming", desc: "Pants, dresses, and skirts to your perfect length.", price: "From $20", detail: "Jeans, trousers, formal wear, dresses — all hemmed with precision." },
-  { title: "Resizing", desc: "Taking in or letting out for a custom fit.", price: "From $45", detail: "Whether you've gained or lost weight, we'll make it fit beautifully." },
-  { title: "Bridal Alterations", desc: "Complex structural work for your most important day.", price: "Consultation", detail: "Bustle additions, bodice adjustments, length changes, and more." },
-  { title: "Zipper Repair", desc: "Replacement or fixing of broken and stuck zippers.", price: "From $25", detail: "Invisible, standard, or heavy-duty zippers replaced expertly." },
-  { title: "Sleeve Adjustments", desc: "Shortening, lengthening, or tapering sleeves.", price: "From $30", detail: "Suit jackets, blouses, formal and casual wear." },
-  { title: "Custom Fitting", desc: "Full garment restructuring for a bespoke fit.", price: "Consultation", detail: "Complete take-in or let-out across multiple seams." },
-];
-
-const pricing = [
-  { service: "Pants Hem (no cuff)", price: "$20–$35" },
-  { service: "Pants Hem (with cuff)", price: "$30–$45" },
-  { service: "Dress / Skirt Hem", price: "$25–$60" },
-  { service: "Side Seam Take-In/Let Out", price: "$45–$85" },
-  { service: "Zipper Replacement", price: "$25–$65" },
-  { service: "Sleeve Shortening", price: "$30–$55" },
-  { service: "Jacket / Blazer Alterations", price: "$50–$120" },
-  { service: "Bridal Gown Alterations", price: "Consultation" },
-  { service: "Rush Service", price: "+ $25–$50 fee" },
+// Official Handy Brandy Pricing Data Structure
+const alterationCategories = [
+  {
+    category: "Pants & Jeans",
+    items: [
+      { service: "Basic Hem", price: "$10–$20" },
+      { service: "Original Finish Hem", price: "$15–$25" },
+      { service: "Waist Take In/Out", price: "$20–$40" },
+      { service: "Seat Adjustment", price: "$15–$30" },
+      { service: "Taper Legs", price: "$20–$45" },
+      { service: "Zipper Replacement", price: "$15–$35" },
+    ],
+  },
+  {
+    category: "Shirts & Blouses",
+    items: [
+      { service: "Shorten Sleeves (No Cuff)", price: "$10–$20" },
+      { service: "Shorten Sleeves (With Cuffs)", price: "$15–$30" },
+      { service: "Take In Sides", price: "$15–$30" },
+      { service: "Collar Adjustment", price: "$20–$40" },
+    ],
+  },
+  {
+    category: "Suits & Jackets",
+    items: [
+      { service: "Sleeve Shortening (No Buttons)", price: "$25–$50" },
+      { service: "Sleeve Shortening (With Buttons)", price: "$40–$80" },
+      { service: "Take In Sides", price: "$30–$70" },
+      { service: "Jacket Length Shortening", price: "$50–$120" },
+    ],
+  },
+  {
+    category: "Dresses",
+    items: [
+      { service: "Simple Hem", price: "$20–$50" },
+      { service: "Layered/Formal Hem", price: "$40–$100" },
+      { service: "Take In Sides", price: "$25–$60" },
+      { service: "Strap Adjustment", price: "$10–$25" },
+      { service: "Add Darts/Shape", price: "$15–$40" },
+      { service: "Zipper Replacement", price: "$25–$60" },
+    ],
+  },
+  {
+    category: "Repairs & Miscellaneous",
+    items: [
+      { service: "Patch/Repair Tears", price: "$10–$30" },
+      { service: "Replace Buttons", price: "$2–$5 each" },
+      { service: "Seam Repair", price: "$10–$15" },
+      { service: "Elastic Replacement", price: "$15–$30" },
+    ],
+  },
+  {
+    category: "Add-On Fees",
+    items: [
+      { service: "Rush Service (24–48 Hours)", price: "+$10–$30" },
+      { service: "Specialty Fabric", price: "$10–$50" },
+    ],
+    note: "Rush availability must be discussed and paid for before the garment is accepted.",
+  },
 ];
 
 const gallery = [
@@ -52,9 +93,9 @@ const gallery = [
 ];
 
 const testimonials = [
-  { name: "Elena V.", text: "She altered my wedding dress beautifully. It fit like it was made just for me. Couldn't have asked for better work.", stars: 5 },
-  { name: "Courtney H.", text: "Had three pairs of pants hemmed and they all came out perfectly. The attention to detail is unreal.", stars: 5 },
-  { name: "Marisol G.", text: "Got my blazer taken in and it's transformed my whole look. She understood exactly what I wanted.", stars: 5 },
+  { name: "Elena V.", text: "Handy Brandy transformed my formal dress! The fit was absolutely precise and turned around so quickly.", stars: 5 },
+  { name: "Courtney H.", text: "Had multiple pants and jackets altered by Handy Brandy. Exceptional quality, clean seams, fair pricing.", stars: 5 },
+  { name: "Marisol G.", text: "Got my blazer taken in and sleeve length adjusted perfectly. Truly professional tailoring!", stars: 5 },
 ];
 
 const fadeUp = {
@@ -72,7 +113,7 @@ export default function AlterationsPage() {
   const onSubmit = () => {
     toast({
       title: "Fitting Scheduled",
-      description: "Thank you! We'll confirm your alteration appointment within 24 hours.",
+      description: "Thank you! We'll confirm your alteration appointment with Handy Brandy within 24 hours.",
     });
     form.reset();
   };
@@ -83,31 +124,101 @@ export default function AlterationsPage() {
       <div className="pt-36 pb-16 text-center relative overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-b from-secondary/5 to-transparent pointer-events-none" />
         <motion.div initial="hidden" animate="visible" variants={fadeUp}>
-          <p className="text-secondary text-xs tracking-[0.3em] uppercase mb-4">Atelier Tailoring</p>
+          <p className="text-secondary text-xs tracking-[0.3em] uppercase mb-4">Handy Brandy</p>
           <h1 className="font-serif text-5xl md:text-6xl font-bold text-white mb-5">Alterations</h1>
           <div className="flex items-center justify-center gap-4 mb-5">
             <div className="h-px w-16 bg-secondary/60" />
             <ScissorsLineDashed className="text-secondary w-5 h-5" />
             <div className="h-px w-16 bg-secondary/60" />
           </div>
-          <p className="text-white/60 max-w-xl mx-auto text-lg leading-relaxed">
-            Expert tailoring to ensure your garments fit flawlessly — from everyday wear to bridal gowns.
+          <p className="text-white/60 max-w-xl mx-auto text-lg leading-relaxed mb-6">
+            Expert tailoring and custom garment alterations — precision fitting for pants, shirts, suits, dresses, and repairs.
           </p>
+          
+          {/* Business Phone & Hours Quick Info */}
+          <div className="flex flex-wrap items-center justify-center gap-6 text-sm text-white/80">
+            <a
+              href="tel:7063478273"
+              className="flex items-center gap-2 bg-secondary/10 border border-secondary/30 px-4 py-2 hover:bg-secondary/20 transition-colors"
+            >
+              <Phone className="w-4 h-4 text-secondary" />
+              <span>Call / Text: <strong className="text-secondary">706-347-8273</strong></span>
+            </a>
+            <div className="flex items-center gap-2 bg-white/5 border border-border/40 px-4 py-2">
+              <Clock className="w-4 h-4 text-secondary" />
+              <span>Mon–Fri: 12 PM–7 PM | Sat–Sun: Appointment Only</span>
+            </div>
+          </div>
         </motion.div>
       </div>
 
       <div className="container mx-auto px-4 md:px-8 pb-24 space-y-24">
 
-        {/* Services */}
+        {/* POLICY HIGHLIGHT BOX */}
         <section>
-          <motion.h2
-            initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeUp}
-            className="font-serif text-3xl text-white mb-10 text-center"
+          <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeUp}>
+            <div className="bg-card border border-secondary/40 p-6 md:p-8">
+              <div className="flex items-center gap-3 border-b border-border/40 pb-4 mb-6">
+                <ScissorsLineDashed className="w-6 h-6 text-secondary" />
+                <h2 className="font-serif text-2xl md:text-3xl text-white">Handy Brandy Alteration Policies</h2>
+              </div>
+              
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="bg-secondary/10 border-l-4 border-secondary p-5">
+                  <h4 className="font-serif text-secondary text-lg font-semibold mb-2">Standard Turnaround</h4>
+                  <p className="text-white/90 text-sm font-medium leading-relaxed">
+                    "Standard alterations typically take approximately 1–2 weeks."
+                  </p>
+                </div>
+
+                <div className="bg-primary/10 border-l-4 border-primary p-5">
+                  <h4 className="font-serif text-primary text-lg font-semibold mb-2">Rush Orders Policy</h4>
+                  <p className="text-white/90 text-sm font-medium leading-relaxed">
+                    "Rush orders must be discussed and paid for before garments are accepted."
+                  </p>
+                </div>
+              </div>
+            </div>
+          </motion.div>
+        </section>
+
+        {/* ALTERATION PRICING IMAGE SECTION */}
+        <section>
+          <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeUp} className="text-center mb-8">
+            <p className="text-secondary text-xs tracking-[0.3em] uppercase mb-3">Official Guide</p>
+            <h2 className="font-serif text-3xl md:text-4xl text-white mb-3">Alteration Pricing Guide</h2>
+            <p className="text-white/50 text-sm max-w-xl mx-auto">
+              View the Handy Brandy official pricing chart below. Complete itemized text pricing is also detailed below.
+            </p>
+          </motion.div>
+
+          <motion.div
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            variants={fadeUp}
+            className="flex justify-center"
           >
-            Tailoring Services
-          </motion.h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-            {services.map((s, i) => (
+            <div className="w-full max-w-3xl bg-card border border-border/60 p-3 md:p-4 shadow-2xl">
+              <img
+                data-testid="img-alteration-pricing"
+                src="/images/handy-brandy-alteration-pricing.jpg"
+                alt="Handy Brandy alteration pricing guide"
+                className="w-full h-auto max-w-full rounded-none object-contain block"
+              />
+            </div>
+          </motion.div>
+        </section>
+
+        {/* ITEMIZED PRICING CARDS */}
+        <section>
+          <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeUp} className="text-center mb-12">
+            <p className="text-secondary text-xs tracking-[0.3em] uppercase mb-3">Full Itemized Rates</p>
+            <h2 className="font-serif text-3xl md:text-4xl text-white">Alteration Pricing Breakdown</h2>
+          </motion.div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {alterationCategories.map((cat, i) => (
               <motion.div
                 key={i}
                 custom={i}
@@ -115,48 +226,28 @@ export default function AlterationsPage() {
                 whileInView="visible"
                 viewport={{ once: true }}
                 variants={fadeUp}
-                data-testid={`card-alteration-${i}`}
-                className="bg-card border border-border/60 p-8 hover:border-secondary/50 transition-all duration-300 group"
               >
-                <div className="flex justify-between items-start mb-3">
-                  <h3 className="font-serif text-xl text-white group-hover:text-secondary transition-colors">{s.title}</h3>
-                  <span className="text-secondary text-sm font-semibold ml-4 shrink-0">{s.price}</span>
-                </div>
-                <p className="text-white/50 text-sm leading-relaxed mb-3">{s.desc}</p>
-                <p className="text-white/30 text-xs leading-relaxed">{s.detail}</p>
+                <Card data-testid={`card-alteration-category-${i}`} className="bg-card border-border/60 hover:border-secondary/60 transition-all duration-300 h-full rounded-none flex flex-col justify-between">
+                  <CardHeader className="border-b border-border/40 pb-4">
+                    <CardTitle className="font-serif text-xl text-white">{cat.category}</CardTitle>
+                  </CardHeader>
+                  <CardContent className="pt-4 flex-grow space-y-3">
+                    {cat.items.map((item, idx) => (
+                      <div key={idx} className="flex justify-between items-center text-sm py-1.5 border-b border-border/30">
+                        <span className="text-white/80 font-medium">{item.service}</span>
+                        <span className="text-secondary font-bold text-sm shrink-0 ml-3">{item.price}</span>
+                      </div>
+                    ))}
+                    {cat.note && (
+                      <div className="mt-3 bg-secondary/10 p-3 border-l-2 border-secondary text-xs text-white/80 italic">
+                        ⚠️ {cat.note}
+                      </div>
+                    )}
+                  </CardContent>
+                </Card>
               </motion.div>
             ))}
           </div>
-        </section>
-
-        {/* Pricing Guide */}
-        <section>
-          <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeUp} className="text-center mb-10">
-            <p className="text-secondary text-xs tracking-[0.3em] uppercase mb-3">Transparent Pricing</p>
-            <h2 className="font-serif text-3xl md:text-4xl text-white">Pricing Guide</h2>
-          </motion.div>
-          <motion.div
-            initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeUp}
-            className="max-w-2xl mx-auto bg-card border border-border/60"
-          >
-            {pricing.map((item, i) => (
-              <div
-                key={i}
-                className={`flex justify-between items-center px-8 py-4 ${
-                  i < pricing.length - 1 ? "border-b border-border/30" : ""
-                } hover:bg-white/5 transition-colors`}
-              >
-                <span className="text-white/80 font-medium">{item.service}</span>
-                <span className="text-secondary font-semibold text-sm">{item.price}</span>
-              </div>
-            ))}
-            <div className="px-8 py-5 bg-secondary/5 border-t border-secondary/20">
-              <p className="text-white/40 text-xs leading-relaxed">
-                Prices are estimates. Final pricing confirmed at consultation. Bridal and formal gowns require in-person assessment.
-                Standard turnaround: 1–2 weeks. Rush available for an additional fee.
-              </p>
-            </div>
-          </motion.div>
         </section>
 
         {/* Booking / Scheduler */}
@@ -164,39 +255,32 @@ export default function AlterationsPage() {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
             <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeUp}>
               <p className="text-secondary text-xs tracking-[0.3em] uppercase mb-3">Schedule a Fitting</p>
-              <h2 className="font-serif text-4xl text-white mb-6">Book Your Fitting</h2>
+              <h2 className="font-serif text-4xl text-white mb-6">Book Your Fitting with Handy Brandy</h2>
               <p className="text-white/50 leading-relaxed mb-8">
-                Bring your garment in for a professional fitting and consultation. We'll assess the alterations needed and give you an exact quote and timeline.
+                Bring your garments in for precision measurement and tailoring. For rush service requests, availability must be discussed and paid before garments are accepted.
               </p>
 
-              <div className="space-y-5 mb-10">
-                <div className="bg-secondary/10 border-l-4 border-secondary p-5">
-                  <h4 className="font-serif text-secondary mb-1">Turnaround Times</h4>
-                  <p className="text-white/50 text-sm leading-relaxed">
-                    Standard alterations: 1–2 weeks. Bridal and formal wear: 4–8 weeks. Rush service available.
+              <div className="space-y-4 mb-8">
+                <div className="bg-card border border-border/50 p-4">
+                  <h4 className="font-serif text-white font-semibold mb-1 flex items-center gap-2">
+                    <Phone className="w-4 h-4 text-secondary" />
+                    Contact Handy Brandy
+                  </h4>
+                  <p className="text-white/70 text-sm">
+                    Phone: <a href="tel:7063478273" className="text-secondary font-bold hover:underline">706-347-8273</a>
                   </p>
                 </div>
-                <div className="bg-primary/10 border-l-4 border-primary p-5">
-                  <h4 className="font-serif text-primary mb-1">What to Bring</h4>
-                  <p className="text-white/50 text-sm leading-relaxed">
-                    Bring the garment and the shoes or undergarments you'll wear with it for the most accurate fitting.
-                  </p>
-                </div>
-              </div>
 
-              {/* Turnaround visual */}
-              <div className="grid grid-cols-2 gap-4">
-                {[
-                  { label: "Standard Alterations", time: "1–2 Weeks" },
-                  { label: "Bridal & Formal", time: "4–8 Weeks" },
-                  { label: "Rush Service", time: "3–5 Days" },
-                  { label: "Consultation", time: "Free" },
-                ].map((item, i) => (
-                  <div key={i} className="bg-card border border-border/40 p-4 text-center">
-                    <p className="text-white/40 text-xs mb-1">{item.label}</p>
-                    <p className="text-secondary font-serif text-lg font-bold">{item.time}</p>
-                  </div>
-                ))}
+                <div className="bg-card border border-border/50 p-4">
+                  <h4 className="font-serif text-white font-semibold mb-1 flex items-center gap-2">
+                    <Clock className="w-4 h-4 text-secondary" />
+                    Operating Hours
+                  </h4>
+                  <p className="text-white/70 text-sm">
+                    Monday–Friday: 12 PM–7 PM<br />
+                    Saturday–Sunday: Appointment Only
+                  </p>
+                </div>
               </div>
             </motion.div>
 
@@ -238,16 +322,16 @@ export default function AlterationsPage() {
                       <Select onValueChange={field.onChange} defaultValue={field.value}>
                         <FormControl>
                           <SelectTrigger data-testid="select-service" className="bg-background rounded-none border-border/60 text-white/60 py-5">
-                            <SelectValue placeholder="Service Type" />
+                            <SelectValue placeholder="Garment / Service Category" />
                           </SelectTrigger>
                         </FormControl>
                         <SelectContent className="bg-card border-border rounded-none">
-                          <SelectItem value="hemming">Hemming</SelectItem>
-                          <SelectItem value="resizing">Resizing</SelectItem>
-                          <SelectItem value="bridal">Bridal Alterations</SelectItem>
-                          <SelectItem value="zipper">Zipper Repair</SelectItem>
-                          <SelectItem value="sleeves">Sleeve Adjustments</SelectItem>
-                          <SelectItem value="fitting">Custom Fitting</SelectItem>
+                          <SelectItem value="pants">Pants & Jeans ($10–$45)</SelectItem>
+                          <SelectItem value="shirts">Shirts & Blouses ($10–$40)</SelectItem>
+                          <SelectItem value="suits">Suits & Jackets ($25–$120)</SelectItem>
+                          <SelectItem value="dresses">Dresses ($10–$100)</SelectItem>
+                          <SelectItem value="repairs">Repairs & Misc ($2–$30)</SelectItem>
+                          <SelectItem value="rush">Rush Service (+ $10–$30)</SelectItem>
                         </SelectContent>
                       </Select>
                       <FormMessage />
@@ -266,7 +350,7 @@ export default function AlterationsPage() {
                       <FormControl>
                         <Textarea
                           data-testid="textarea-garment"
-                          placeholder="Describe the garment and what alterations are needed..."
+                          placeholder="Describe the garment(s), requested alterations, or rush order details..."
                           className="bg-background rounded-none border-border/60 resize-none"
                           rows={4}
                           {...field}
@@ -292,7 +376,7 @@ export default function AlterationsPage() {
         {/* Gallery */}
         <section>
           <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeUp} className="text-center mb-10">
-            <p className="text-secondary text-xs tracking-[0.3em] uppercase mb-3">Our Work</p>
+            <p className="text-secondary text-xs tracking-[0.3em] uppercase mb-3">Handy Brandy Work</p>
             <h2 className="font-serif text-3xl md:text-4xl text-white">Alteration Gallery</h2>
           </motion.div>
           <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 md:gap-4">
@@ -309,7 +393,7 @@ export default function AlterationsPage() {
                 <img
                   data-testid={`img-alt-gallery-${i}`}
                   src={src}
-                  alt={`Alteration work ${i + 1}`}
+                  alt={`Handy Brandy alteration work ${i + 1}`}
                   className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                 />
                 <div className="absolute inset-0 bg-secondary/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
@@ -352,3 +436,4 @@ export default function AlterationsPage() {
     </div>
   );
 }
+
