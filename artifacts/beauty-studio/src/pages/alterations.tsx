@@ -110,13 +110,50 @@ export default function AlterationsPage() {
     defaultValues: { name: "", email: "", phone: "", service: "", garment: "", date: "", notes: "" },
   });
 
-  const onSubmit = () => {
-    toast({
-      title: "Fitting Scheduled",
-      description: "Thank you! We'll confirm your alteration appointment with Handy Brandy within 24 hours.",
-    });
-    form.reset();
+  const onSubmit = async (values: z.infer<typeof schema>) => {
+    try {
+      const response = await fetch("https://formspree.io/f/xkjgbako", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Accept": "application/json",
+        },
+        body: JSON.stringify({
+          _subject: "Handy Brandy Alterations Request",
+          formType: "Handy Brandy — Alterations Fitting",
+          name: values.name,
+          email: values.email,
+          phone: values.phone,
+          service: values.service,
+          date: values.date,
+          garment: values.garment,
+        }),
+      });
+
+      if (response.ok) {
+        toast({
+          title: "Fitting Scheduled",
+          description: "Thank you! We'll confirm your alteration appointment with Handy Brandy within 24 hours.",
+        });
+        form.reset();
+      } else {
+        toast({
+          variant: "destructive",
+          title: "Submission Error",
+          description: "Unable to send your request. Please try again or call 706-347-8273.",
+        });
+      }
+    } catch {
+      toast({
+        variant: "destructive",
+        title: "Submission Error",
+        description: "Unable to send your request. Please try again or call 706-347-8273.",
+      });
+    }
   };
+
+  const today = new Date();
+  const minDate = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, "0")}-${String(today.getDate()).padStart(2, "0")}`;
 
   return (
     <div className="bg-background min-h-screen text-foreground">
@@ -340,7 +377,14 @@ export default function AlterationsPage() {
                   <FormField control={form.control} name="date" render={({ field }) => (
                     <FormItem>
                       <FormControl>
-                        <Input data-testid="input-date" type="date" className="bg-background rounded-none border-border/60 text-white/60 py-5" {...field} />
+                        <Input
+                          data-testid="input-date"
+                          type="date"
+                          min={minDate}
+                          onClick={(e) => e.currentTarget.showPicker?.()}
+                          className="bg-background rounded-none border-border/60 text-white py-5 [color-scheme:dark] cursor-pointer"
+                          {...field}
+                        />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -363,9 +407,10 @@ export default function AlterationsPage() {
                     data-testid="button-submit-alterations"
                     type="submit"
                     size="lg"
-                    className="w-full bg-secondary hover:bg-secondary/90 text-black font-bold rounded-none py-6 tracking-widest uppercase text-sm"
+                    disabled={form.formState.isSubmitting}
+                    className="w-full bg-secondary hover:bg-secondary/90 text-black font-bold rounded-none py-6 tracking-widest uppercase text-sm disabled:opacity-50"
                   >
-                    Schedule My Fitting
+                    {form.formState.isSubmitting ? "Sending..." : "Schedule My Fitting"}
                   </Button>
                 </form>
               </Form>

@@ -103,12 +103,46 @@ export default function CraftingPage() {
     defaultValues: { name: "", email: "", phone: "", projectType: "", budget: "", description: "" },
   });
 
-  const onSubmit = () => {
-    toast({
-      title: "Project Inquiry Received",
-      description: "Thank you! We'll review your project details and reach out within 1–2 business days.",
-    });
-    form.reset();
+  const onSubmit = async (values: z.infer<typeof schema>) => {
+    try {
+      const response = await fetch("https://formspree.io/f/xkjgbako", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Accept": "application/json",
+        },
+        body: JSON.stringify({
+          _subject: "Multifaceted Queen Crafting Inquiry",
+          formType: "Crafting Inquiry",
+          name: values.name,
+          email: values.email,
+          phone: values.phone || "",
+          projectType: values.projectType,
+          budget: values.budget,
+          description: values.description,
+        }),
+      });
+
+      if (response.ok) {
+        toast({
+          title: "Project Inquiry Received",
+          description: "Thank you! We'll review your project details and reach out within 1–2 business days.",
+        });
+        form.reset();
+      } else {
+        toast({
+          variant: "destructive",
+          title: "Submission Error",
+          description: "Unable to send your request. Please try again or call 706-347-8273.",
+        });
+      }
+    } catch {
+      toast({
+        variant: "destructive",
+        title: "Submission Error",
+        description: "Unable to send your request. Please try again or call 706-347-8273.",
+      });
+    }
   };
 
   return (
@@ -331,9 +365,10 @@ export default function CraftingPage() {
                     data-testid="button-submit-crafting"
                     type="submit"
                     size="lg"
-                    className="w-full bg-secondary hover:bg-secondary/90 text-black font-bold rounded-none py-6 tracking-widest uppercase text-sm"
+                    disabled={form.formState.isSubmitting}
+                    className="w-full bg-secondary hover:bg-secondary/90 text-black font-bold rounded-none py-6 tracking-widest uppercase text-sm disabled:opacity-50"
                   >
-                    Submit Project Inquiry
+                    {form.formState.isSubmitting ? "Sending..." : "Submit Project Inquiry"}
                   </Button>
                 </form>
               </Form>

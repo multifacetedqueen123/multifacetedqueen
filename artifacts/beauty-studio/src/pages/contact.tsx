@@ -32,12 +32,45 @@ export default function ContactPage() {
     defaultValues: { name: "", email: "", phone: "", interest: "", message: "" },
   });
 
-  const onSubmit = () => {
-    toast({
-      title: "Message Sent",
-      description: "Thank you for reaching out! We'll get back to you within 1–2 business days.",
-    });
-    form.reset();
+  const onSubmit = async (values: z.infer<typeof schema>) => {
+    try {
+      const response = await fetch("https://formspree.io/f/xkjgbako", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Accept": "application/json",
+        },
+        body: JSON.stringify({
+          _subject: "Multifaceted Queen General Inquiry",
+          formType: "General Contact",
+          name: values.name,
+          email: values.email,
+          phone: values.phone || "",
+          interest: values.interest,
+          message: values.message,
+        }),
+      });
+
+      if (response.ok) {
+        toast({
+          title: "Message Sent",
+          description: "Thank you for reaching out! We'll get back to you within 1–2 business days.",
+        });
+        form.reset();
+      } else {
+        toast({
+          variant: "destructive",
+          title: "Submission Error",
+          description: "Unable to send your request. Please try again or call 706-347-8273.",
+        });
+      }
+    } catch {
+      toast({
+        variant: "destructive",
+        title: "Submission Error",
+        description: "Unable to send your request. Please try again or call 706-347-8273.",
+      });
+    }
   };
 
   return (
@@ -229,9 +262,10 @@ export default function ContactPage() {
                   data-testid="button-submit-contact"
                   type="submit"
                   size="lg"
-                  className="w-full bg-secondary hover:bg-secondary/90 text-black font-bold rounded-none py-7 tracking-widest uppercase text-sm"
+                  disabled={form.formState.isSubmitting}
+                  className="w-full bg-secondary hover:bg-secondary/90 text-black font-bold rounded-none py-7 tracking-widest uppercase text-sm disabled:opacity-50"
                 >
-                  Send Message
+                  {form.formState.isSubmitting ? "Sending..." : "Send Message"}
                 </Button>
               </form>
             </Form>
