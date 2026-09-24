@@ -16,6 +16,8 @@ export default function Footer() {
             </p>
             <p className="text-xs text-white/60">
               Call / Text: <a href="tel:7063478273" className="text-secondary font-medium hover:underline">706-347-8273</a>
+              <span className="mx-2 text-white/30">•</span>
+              Email: <a href="mailto:multifacetedqueen123@gmail.com" className="text-secondary font-medium hover:underline">multifacetedqueen123@gmail.com</a>
             </p>
           </div>
 

@@ -93,7 +93,9 @@ export default function ContactPage() {
                 </div>
                 <div>
                   <h4 className="font-serif text-xl text-white mb-2">Email</h4>
-                  <p className="text-white/55">info@creativestudio.com</p>
+                  <a href="mailto:multifacetedqueen123@gmail.com" className="text-white/80 hover:text-secondary transition-colors font-medium">
+                    multifacetedqueen123@gmail.com
+                  </a>
                 </div>
               </div>
 
